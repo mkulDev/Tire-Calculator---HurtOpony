@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 type ProductMenuBtnProps = {
   title: string
-  data: {
+  data?: {
     name: string
     path: string
   }[]
@@ -37,24 +37,26 @@ const ProductMenuBtn = ({ title, data }: ProductMenuBtnProps) => {
         onClick={handleToggle}
         className=' flex items-center text-white font-bold text-base cursor-pointer hover:opacity-60 duration-500'>
         {title}
-        <FontAwesomeIcon icon={faCaretDown} className=' text-[15px] self-center ml-2 ' />
+        {data && <FontAwesomeIcon icon={faCaretDown} className=' text-[15px] self-center ml-2 ' />}
       </button>
-      <div
-        ref={modalRef}
-        className={`absolute top-[30px] left-0 px-5 py-3 bg-white ${
-          isOpen ? 'block' : 'hidden'
-        } rounded-sm shadow-md z-10`}>
-        {data.map((element: { name: string; path: string }, index) => {
-          if (element?.name === '|') {
-            return <hr className='my-2' key={index} />
-          }
-          return (
-            <Link href={`/produkty/${element.path}`} className='hover:opacity-50 cursor-pointer ' key={index}>
-              <p className='text-[12px] whitespace-nowrap'>Opony {element.name}</p>
-            </Link>
-          )
-        })}
-      </div>
+      {data && (
+        <div
+          ref={modalRef}
+          className={`absolute top-[30px] left-0 px-5 py-3 bg-white ${
+            isOpen ? 'block' : 'hidden'
+          } rounded-sm shadow-md z-10`}>
+          {data.map((element: { name: string; path: string }, index) => {
+            if (element?.name === '|') {
+              return <hr className='my-2' key={index} />
+            }
+            return (
+              <Link href={`/produkty/${element.path}`} className='hover:opacity-50 cursor-pointer ' key={index}>
+                <p className='text-[12px] whitespace-nowrap'>Opony {element.name}</p>
+              </Link>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

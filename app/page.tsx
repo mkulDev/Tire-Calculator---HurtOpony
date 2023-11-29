@@ -4,7 +4,7 @@ import BrandBar from '@/components/homePage/BrandBar'
 import HomeInfo from '@/components/homePage/HomeInfo'
 import Opinions from '@/components/homePage/Opinions'
 import Carusel from '@/components/homePage/Carusel'
-
+import TireCalculator from '@/components/calculator/TireCalculator'
 export default function Home() {
   return (
     <div className='flex flex-col items-center justify-between bg-white'>
@@ -15,6 +15,7 @@ export default function Home() {
         </video>
       </div>
       <div className='w-full px-[10%'>
+        <TireCalculator />
         <BrandBar />
         <HomeInfo />
         <Opinions />
