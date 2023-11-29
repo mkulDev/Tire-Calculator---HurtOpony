@@ -1,6 +1,9 @@
 ## Tire Calculator App
 The Tire Calculator App is a React-based web application designed to help users compare and calculate tire dimensions, allowing them to check compatibility between original and replacement tires.
+You can see live demo [here](https://tire-calculator-hurt-opony.vercel.app) 
 
+
+<img src="/public/assets/images/screen1.jpg" alt="Image Description" width="500" />    <img src="/public/assets/images/screen2.jpg" alt="Image Description" width="500" /> 
 ## Features
 Mode Switching: Users can switch between "Check Replacement" mode and "Tire Calculator" mode to perform different tasks.
 
