@@ -1,9 +1,9 @@
 'use client'
 import Select from 'react-select'
-import { car } from './tireData'
-import { carRims } from './tireData'
 import { useState, useEffect } from 'react'
 import { TireProperties } from './TireCalculator'
+import { fetchAllTiresData, fetchPossibleRims } from '../../utils/fetchData'
+
 const customOptionStyles = {
   control: (provided: any) => ({
     ...provided,
@@ -59,26 +59,44 @@ const resetTireProperties = {
 }
 
 const InputForm = ({ tire, setData, isReplacament, setTireProperties }: InputFormProps) => {
+  const [allWidths, setAllWidth] = useState<carObj[]>([])
+  const [passibleRims, setPassibleRims] = useState<number[]>([])
   const [widthValue, setWidthValue] = useState<widthState>(null)
   const [profileValue, setProfileValue] = useState<widthState>(null)
   const [rimsValue, setRimsValue] = useState<widthState>(null)
 
   const getWidthName = isReplacament ? 'replacementWidth' : 'tireWidth'
-  const getProfilehName = isReplacament ? 'replacementProfile' : 'tireProfile'
-  const getRimsName = isReplacament ? 'replacementRim' : 'tireRim'
+  const getProfileName = isReplacament ? 'replacementProfile' : 'tireProfile'
+  const getRimName = isReplacament ? 'replacementRim' : 'tireRim'
 
-  const getPrifiles = tire[getWidthName] ? car.find((element) => element.width === Number(tire[getWidthName]))?.profiles : null
+  const getPrifiles = tire[getWidthName] ? allWidths.find((element) => element.width === Number(tire[getWidthName]))?.profiles : null
 
-  const getRims =
-    tire?.[getWidthName] && tire?.[getProfilehName]
-      ? carRims.find((element) => element.width === Number(tire[getWidthName]) && element.profile === Number(tire[getProfilehName]))?.rims
-      : null
+  const getRims = passibleRims
 
-  const widthOptions = [{ label: 'Wybierz', value: 'Wybierz' }, ...car.map((element: carObj, index) => ({ label: element.width, value: element.width }))]
+  const widthOptions = [{ label: 'Wybierz', value: 'Wybierz' }, ...allWidths.map((element: carObj, index) => ({ label: element.width, value: element.width }))]
 
   const profileOptions = getPrifiles ? [{ label: 'Wybierz', value: 'Wybierz' }, ...getPrifiles.map((element, index) => ({ label: element, value: element }))] : []
 
   const rimsOptions = getRims ? [{ label: 'Wybierz', value: 'Wybierz' }, ...getRims.map((element, index) => ({ label: element, value: element }))] : []
+
+  useEffect(() => {
+    async function fetchData() {
+      const response: carObj[] = await fetchAllTiresData('/api/getwidths')
+      setAllWidth(response)
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    async function fetchRims() {
+      if (widthValue?.value && profileValue?.value) {
+        const response = await fetchPossibleRims('/api/getrims', Number(widthValue?.value), Number(profileValue.value))
+        setPassibleRims(response)
+      }
+    }
+    fetchRims()
+  }, [profileValue?.value])
+
   useEffect(() => {
     // We reset profile and rims when width changes
     setProfileValue(null)
@@ -118,7 +136,7 @@ const InputForm = ({ tire, setData, isReplacament, setTireProperties }: InputFor
           onChange={(selectedOption) => {
             setTireProperties(resetTireProperties)
             setProfileValue(selectedOption)
-            setData({ target: { name: getProfilehName, value: selectedOption?.value } })
+            setData({ target: { name: getProfileName, value: selectedOption?.value } })
           }}
           styles={customOptionStyles}
         />
@@ -133,7 +151,7 @@ const InputForm = ({ tire, setData, isReplacament, setTireProperties }: InputFor
           onChange={(selectedOption) => {
             setTireProperties(resetTireProperties)
             setRimsValue(selectedOption)
-            setData({ target: { name: getRimsName, value: selectedOption?.value } })
+            setData({ target: { name: getRimName, value: selectedOption?.value } })
           }}
           styles={customOptionStyles}
         />

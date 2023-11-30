@@ -139,7 +139,6 @@ const TireCalculator = () => {
   const isCompareDisabled = !(tire.tireWidth && tire.tireProfile && tire.tireRim && replacement.replacementWidth && replacement.replacementProfile && replacement.replacementRim)
   const isCalcDisabled = !(tire.tireWidth && tire.tireProfile && tire.tireRim)
 
-  console.log(allowReplacement)
   return (
     <section id='kalkulator'>
       <div className='w-full px-[10%] mt-[30px] '>

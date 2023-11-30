@@ -1,4 +1,10 @@
-const osobowe = [
+type Tire = {
+  width: number
+  profile: number
+  r: number
+}
+
+export const osobowe = [
   { width: 125, profile: 70, r: 16 },
   { width: 125, profile: 70, r: 17 },
   { width: 125, profile: 70, r: 18 },
@@ -841,36 +847,22 @@ const osobowe = [
   { width: 355, profile: 35, r: 21 },
 ]
 
-// const uniqeWidth = () => {
-//   let newArr = []
-//   osobowe.forEach((tire) => {
-//     const withSameWidth = [...new Set(osobowe.filter((item) => item.width === tire.width).map((element) => element.profile))]
-//     const tireObj = { width: tire.width, profiles: withSameWidth }
-
-//     if (newArr.filter((element) => element.width === tire.width).length === 0) {
-//       newArr.push(tireObj)
-//       console.log(tireObj, ',')
-//     }
-//   })
-//   return newArr
-// }
-
-const uniqeWidth = () => {
-  let newArr = []
+export const getUniqueWidths = () => {
+  let newArr: { width: number; profiles: number[] }[] = []
   osobowe.forEach((tire) => {
-    const withSameWidthAndProfilr = [...new Set(osobowe.filter((item) => item.width === tire.width && item.profile === tire.profile).map((element) => element.r))]
+    const withSameWidth = [...new Set(osobowe.filter((item) => item.width === tire.width).map((element) => element.profile))]
+    const tireObj = { width: tire.width, profiles: withSameWidth }
 
-    const filteredObj = {
-      width: tire.width,
-      profile: tire.profile,
-      rims: withSameWidthAndProfilr,
-    }
-    if (newArr.filter((element) => element.width === filteredObj.width && element.profile === filteredObj.profile).length === 0) {
-      newArr.push(filteredObj)
-      console.log(filteredObj, ',')
+    if (newArr.filter((element) => element.width === tire.width).length === 0) {
+      newArr.push(tireObj)
     }
   })
   return newArr
 }
 
-uniqeWidth()
+type GetPossibleRimsProps = { width: number; profile: number }
+
+export const getPossibleRims = ({ width, profile }: GetPossibleRimsProps) => {
+  const rims = [...new Set(osobowe.filter((item) => item.width === width && item.profile === profile).map((element) => element.r))]
+  return rims
+}
